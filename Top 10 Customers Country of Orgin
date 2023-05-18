@@ -1,0 +1,36 @@
+	FROM OUR TOP TEN COUNTRIES; WHAT CITY DO OUR TOP 1O CUSTOMERS LIVE?				
+					
+Query	SELECT	country.country, city.city, COUNT(customer.customer_id) AS unique_customers_count			
+	FROM	customer			
+	JOIN	address			
+		ON customer.address_id = address.address_id			
+	JOIN	city			
+		ON address.city_id = city.city_id			
+	JOIN	country			
+		ON city.country_id = country.country_id			
+	WHERE	country IN			
+		 ('India'			
+		, 'China'			
+		, 'United States'			
+		, 'Japan'			
+		, 'Mexico'			
+		, 'Brazil'			
+		, 'Russian Federation'			
+		, 'Philippines'			
+		, 'Turkey'			
+		, 'Indonesia')			
+	GROUP BY	country, city			
+	ORDER BY	unique_customers_count DESC			
+	LIMIT		10		
+					
+Output	"country"	"city"	"unique_customers_count"		
+	"United States"	"Aurora"	2		
+	"Mexico"	"Acua"	1		
+	"United States"	"Citrus Heights"	1		
+	"Japan"	"Iwaki"	1		
+	"India"	"Ambattur"	1		
+	"China"	"Shanwei"	1		
+	"Brazil"	"So Leopoldo"	1		
+	"Russian Federation"	"Teboksary"	1		
+	"China"	"Tianjin"	1		
+	"Indonesia"	"Cianjur"	1		
