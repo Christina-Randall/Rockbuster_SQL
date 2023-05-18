@@ -1,0 +1,67 @@
+	COMMONALITY OF TOP 100
+	
+Note:	This is a query to see what films appeared in all three of our top ten queries. The result was zero so I changed the limit to 100 and we have three films as a result
+	
+	
+Query	SELECT subquery.film_id
+	FROM (
+	  -- First subquery
+	  SELECT f.film_id
+	  FROM film AS f
+	  WHERE f.film_id IN (
+	    SELECT f2.film_id
+	    FROM film AS f2
+	    JOIN inventory AS i ON f2.film_id = i.film_id
+	    JOIN rental AS r ON i.inventory_id = r.inventory_id
+	    GROUP BY f2.film_id
+	    ORDER BY COUNT(*) DESC
+	    LIMIT 100
+	  )
+	
+	  INTERSECT
+	
+	  -- Second subquery
+	  SELECT f.film_id
+	  FROM film AS f
+	  WHERE f.film_id IN (
+	    SELECT f2.film_id
+	    FROM film AS f2
+	    JOIN inventory AS i ON f2.film_id = i.film_id
+	    JOIN rental AS r ON i.inventory_id = r.inventory_id
+	    GROUP BY f2.film_id
+	    ORDER BY AVG(r.return_date - r.rental_date) DESC
+	    LIMIT 100
+	  )
+	
+	  INTERSECT
+	
+	  -- Third subquery
+	  SELECT f.film_id
+	  FROM film AS f
+	  WHERE f.film_id IN (
+	    SELECT f2.film_id
+	    FROM film AS f2
+	    JOIN inventory AS i ON f2.film_id = i.film_id
+	    JOIN rental AS r ON i.inventory_id = r.inventory_id
+	    JOIN payment AS p ON r.rental_id = p.rental_id
+	    GROUP BY f2.film_id
+	    ORDER BY SUM(p.amount) DESC
+	    LIMIT 100
+	  )
+	) AS subquery
+	
+Output	film_id
+	361
+	879
+	244
+	
+	Top 100 Commonality titles
+	
+Query	SELECT title
+	FROM film
+	WHERE film_id IN (361, 879, 244);
+	
+Output	title
+	Dorado Notting
+	Gleaming Jawbreaker
+	Telegraph Voyage
