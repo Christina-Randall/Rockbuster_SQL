@@ -1,0 +1,33 @@
+	Top 5 Paying Customers					
+						
+Query	SELECT	c.customer_id, c.first_name, c.last_name, country, city, SUM(payment.amount) AS total_paid				
+	FROM	customer AS c				
+	INNER JOIN	address	ON c.address_id = address.address_id			
+						
+	INNER JOIN	city	ON address.city_id = city.city_id			
+						
+	INNER JOIN	country	ON city.country_id = country.country_id			
+						
+	INNER JOIN	payment	ON c.customer_id = payment.customer_id			
+						
+	WHERE	city.city IN	('Aurora'			
+			,'Acua'			
+			,'Citrus Heights'			
+			,'Iwaki'			
+			,'Ambattur'			
+			,'Shanwei'			
+			,'So Leopoldo'			
+			,'Teboksary'			
+			,'Tianjin'			
+			,'Cianjur')			
+						
+	GROUP BY	country.country, city.city, c.first_name, c.last_name, c.customer_id				
+	ORDER BY	total_paid DESC				
+	LIMIT	5				
+						
+Output	"customer_id"	"first_name"	"last_name"	"country"	"city"	"total_paid"
+	225	"Arlene"	"Harvey"	"India"	"Ambattur"	111.76
+	424	"Kyle"	"Spurlock"	"China"	"Shanwei"	109.71
+	240	"Marlene"	"Welch"	"Japan"	"Iwaki"	106.77
+	486	"Glen"	"Talbert"	"Mexico"	"Acua"	100.77
+	537	"Clinton"	"Buford"	"United States"	"Aurora"	98.76
